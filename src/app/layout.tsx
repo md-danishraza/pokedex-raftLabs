@@ -31,7 +31,7 @@ const playfair = Playfair_Display({
 
 // global metadata
 export const metadata: Metadata = {
-  metadataBase: new URL('https://your-deployment-url.vercel.app'), 
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"), 
   title: {
     default: 'MyPokedex - Online Pokédex',
     template: '%s | MyPokedex' // Ensures pages show "Charizard | MyPokedex"
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'MyPokedex - The Ultimate Pokemon Database',
     description: 'Explore stats and abilities for every Pokemon.',
-    url: 'https://your-deployment-url.vercel.app',
+    url: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
     siteName: 'MyPokedex',
     locale: 'en_US',
     type: 'website',
