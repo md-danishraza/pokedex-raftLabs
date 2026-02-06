@@ -1,26 +1,153 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Base */
+--bg: #f8fafc; /* App background */
+--surface: #ffffff; /* Cards / surfaces */
+--border: #e5e7eb; /* Subtle borders */
+
+
+/* Text */
+--text-primary: #0f172a; /* Headings */
+--text-secondary: #475569; /* Body */
+--text-muted: #94a3b8; /* Meta */
+
+
+/* Brand */
+--brand: #ef4444; /* Pokédex red */
+--brand-soft: #fee2e2;
+
+
+/* UI */
+--focus: #2563eb;
+--success: #22c55e;
+--warning: #f59e0b;
+--danger: #dc2626;
+
+
+/* Pokémon Type Colors */
+--type-fire: #ef4444;
+--type-water: #3b82f6;
+--type-grass: #22c55e;
+--type-electric: #facc15;
+--type-ice: #67e8f9;
+--type-fighting: #b91c1c;
+--type-poison: #a855f7;
+--type-ground: #d97706;
+--type-flying: #60a5fa;
+--type-psychic: #ec4899;
+--type-bug: #84cc16;
+--type-rock: #a16207;
+--type-ghost: #6366f1;
+--type-dragon: #7c3aed;
+--type-dark: #334155;
+--type-steel: #64748b;
+--type-fairy: #f472b6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* typeography */
+html {
+font-size: 16px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), serif;
+  background-color: var(--bg);
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+
+h1 { font-size: clamp(2.5rem, 4vw, 3.5rem); }
+h2 { font-size: clamp(2rem, 3vw, 2.5rem); }
+h3 { font-size: 1.5rem; }
+
+
+p {
+max-width: 65ch;
+}
+
+
+/* layout */
+.container {
+max-width: 1200px;
+margin-inline: auto;
+padding: 1.5rem;
+}
+
+
+.grid {
+display: grid;
+gap: 1.5rem;
+}
+
+
+.grid-cards {
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+
+/* card system */
+.card {
+background: var(--surface);
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 1.25rem;
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.card:hover {
+transform: translateY(-4px);
+box-shadow: 0 20px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* stat bar */
+.stat {
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+
+
+.stat-bar {
+flex: 1;
+height: 10px;
+background: var(--border);
+border-radius: 999px;
+overflow: hidden;
+}
+
+
+.stat-fill {
+height: 100%;
+background: linear-gradient(90deg, var(--brand), var(--focus));
+}
+
+
+/* accessibility and SEO */
+img {
+max-width: 100%;
+height: auto;
+}
+
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+
+a:focus-visible {
+outline: 2px solid var(--focus);
+outline-offset: 2px;
 }
