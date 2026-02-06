@@ -27,13 +27,27 @@ const playfair = Playfair_Display({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  title: 'MyPokedex - Online Pokédex',
-  description: 'Search Pokémon stats, types, evolutions and weaknesses.',
-  icons: {
-    icon: {url:"/flaticon.png",type: 'image/png', sizes: '64x64' },
-  },
 
+
+// global metadata
+export const metadata: Metadata = {
+  metadataBase: new URL('https://your-deployment-url.vercel.app'), 
+  title: {
+    default: 'MyPokedex - Online Pokédex',
+    template: '%s | MyPokedex' // Ensures pages show "Charizard | MyPokedex"
+  },
+  description: 'Search Pokémon stats, types, evolutions and weaknesses.',
+  openGraph: {
+    title: 'MyPokedex - The Ultimate Pokemon Database',
+    description: 'Explore stats and abilities for every Pokemon.',
+    url: 'https://your-deployment-url.vercel.app',
+    siteName: 'MyPokedex',
+    locale: 'en_US',
+    type: 'website',
+  },
+  icons: {
+    icon: '/flaticon.png',
+  }
 }
 
 export default function RootLayout({
@@ -43,7 +57,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${noirPro.variable} ${playfair.variable}`}>
-      <body>{children}</body>
+      <body className='flex flex-col min-h-screen'>
+        {children}
+
+      <footer className='mt-auto text-center py-4 '>&copy;{new Date().getFullYear()} Developed By Danish</footer>
+      </body>
     </html>
   )
 }

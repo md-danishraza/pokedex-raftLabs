@@ -1,12 +1,13 @@
-import Image from 'next/image';
-import Link from 'next/link';
+
 import { notFound } from 'next/navigation';
 import { getPokemon } from "@/lib/pokeapi";
 import { capitalize } from '@/lib/utils';
-import TypeBadge from "@/components/ui/TypeBadge";
+
 import StatBar from "@/components/ui/StatBar";
 import JsonLd from "@/components/seo/JsonLd";
 import type { Metadata } from 'next';
+import BackLink from '@/components/ui/BackLink';
+import ProfileCard from '@/components/ui/ProfileCard';
 
 interface PageProps {
   params: { slug: string };
@@ -16,15 +17,32 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
     const pokemon = await getPokemon((await params).slug);
+    const image = pokemon.sprites.other['official-artwork'].front_default;
     const name = capitalize(pokemon.name);
+    const stats = pokemon.stats.map(s => `${s.stat.name}: ${s.base_stat}`).join(', ');
     
     return {
-      title: `${name} Stats, Weaknesses & Evolution | MyPokedex`,
-      description: `Detailed stats for ${name} (Pokemon #${pokemon.id}). Type: ${pokemon.types.map(t => t.type.name).join('/')}. Base HP: ${pokemon.stats[0].base_stat}.`,
+      title: `${name} Stats, Weaknesses & Evolution`,
+      description: `Detailed Pokedex entry for ${name}. Base Stats: ${stats}. Type: ${pokemon.types.map(t => t.type.name).join('/')}.`,
       openGraph: {
-        title: `${name} - Pokedex Entry`,
-        images: [pokemon.sprites.other['official-artwork'].front_default],
-      }
+        title: `${name} - Pokedex Stats`,
+        description: `Check out the HP, Attack, and Defense stats for ${name}.`,
+        url: `/pokemon/${(await params).slug}`,
+        images: [
+          {
+            url: image, // dynamic Pokemon image.
+            width: 800,
+            height: 800,
+            alt: `${name} official artwork`,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${name} Stats`,
+        description: `Base Stats: ${stats}`,
+        images: [image],
+      },
     };
   } catch (error) {
     return { title: 'Pokemon Not Found' };
@@ -63,46 +81,11 @@ export default async function PokemonPage({ params }: PageProps) {
       <JsonLd data={jsonLd} />
       
       {/* Breadcrumb Navigation */}
-      <Link href="/" className="inline-block mb-8 text-[var(--text-muted)] hover:text-[var(--brand)] transition-colors">
-        ← Back to Pokedex
-      </Link>
+      <BackLink href="/"  label="Back to Pokedex"/>
 
-      <div className="grid md:grid-cols-2 gap-12 items-start">
-        
-        {/* Left Column: Image & Basic Info */}
-        <div className="card text-center relative md:sticky top-8 h-fit">
-          <div className="relative aspect-square w-full mb-6 bg-slate-50 rounded-xl">
-            <Image
-              src={image}
-              alt={name}
-              fill
-              className="object-contain p-8"
-              priority
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          </div>
-          <span className="text-4xl font-bold text-gray-200 block -mt-4 mb-2">
-            #{String(pokemon.id).padStart(3, '0')}
-          </span>
-          <h1 className="text-4xl mb-6">{name}</h1>
-          
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {pokemon.types.map((t) => (
-              <TypeBadge key={t.type.name} type={t.type.name} />
-            ))}
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 text-sm border-t border-[var(--border)] pt-6">
-            <div>
-              <p className="text-[var(--text-muted)]">Height</p>
-              <p className="font-bold text-lg">{pokemon.height / 10} m</p>
-            </div>
-            <div>
-              <p className="text-[var(--text-muted)]">Weight</p>
-              <p className="font-bold text-lg">{pokemon.weight / 10} kg</p>
-            </div>
-          </div>
-        </div>
+      <div className="grid md:grid-cols-2 gap-12 items-start mt-2">
+        {/* left column: profile card */}
+        <ProfileCard id={pokemon.id} name={name} image={image} height={pokemon.height} weight={pokemon.weight} types={pokemon.types}/>
 
         {/* Right Column: Stats & Data */}
         <div className="space-y-8 mt-8 md:mt-0">
@@ -121,15 +104,7 @@ export default async function PokemonPage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="bg-blue-50 p-8 rounded-2xl border border-blue-100">
-            <h3 className="text-xl font-bold text-blue-900 mb-2">Programmatic SEO Note</h3>
-            <p className="text-blue-800 text-sm">
-              This page was generated server-side. View the source code to see the 
-              custom <strong>&lt;title&gt;</strong>, <strong>&lt;meta description&gt;</strong>, 
-              and <strong>application/ld+json</strong> script automatically populated 
-              with {name}'s specific data.
-            </p>
-          </div>
+          
         </div>
       </div>
     </main>

@@ -1,0 +1,27 @@
+/* src/components/ui/BackLink.module.css */
+.link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+  
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+  
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-family: var(--font-heading);
+    color: var(--text-secondary);
+    font-size: 0.875rem; /* Added for better sizing */
+    font-weight: 500;
+    text-decoration: none;
+  
+    transition: all 0.2s ease;
+  }
+  
+  .link:hover {
+    background: var(--brand-soft);
+    border-color: var(--brand-soft); /* Optional: matches bg */
+    color: var(--brand);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Adds a subtle lift effect */
+  }
